@@ -7,13 +7,11 @@ vignette: >
   %\VignetteIndexEntry{Accessing SLGA Data}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: inline
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  collapse = TRUE, warning = FALSE, message = FALSE,
   comment = "#>",
   fig.align = 'center', fig.width = 8, fig.height = 5, fig.caption = FALSE
 )
@@ -29,7 +27,7 @@ options(stringsAsFactors = FALSE)
 
 Two high-level wrapper functions, `get_soils_data()` and `get_lscape_data()`, have been provided to manage downloads. To use them correctly, you should be aware of the package datasets `slga_attribute_info()` and `slga_product_info()`. They contain allowable values for some of the function inputs as well as key metadata.
 
-The two tables are derived from information on the [SLGA website](http://www.clw.csiro.au/aclep/soilandlandscapegrid) and in the WCS metadata documents.
+The two tables are derived from information on the [SLGA website](https://www.clw.csiro.au/aclep/soilandlandscapegrid) and in the WCS metadata documents.
 
 ## Soils data
 
@@ -57,7 +55,6 @@ aoi <- c(152.95, -27.55, 153.07, -27.45)
 bne_surface_clay <- get_soils_data(product = 'NAT', attribute = 'CLY',
                                    component = 'ALL', depth = 1,
                                    aoi = aoi, write_out = FALSE)
-
 ```
 
 Note that valid `product` parameters are defined in `slga_product_info$Short_Name`, and valid `attribute` parameters in `slga_attribute_info$Code`. If a particular combination is not available, the function will fail gracefully.

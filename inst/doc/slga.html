@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="@obrl_soil" />
 
-<meta name="date" content="2019-08-03" />
+<meta name="date" content="2020-03-31" />
 
 <title>Accessing SLGA Data</title>
 
@@ -118,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,18 +301,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Accessing SLGA Data</h1>
 <h4 class="author"><span class="citation">@obrl_soil</span></h4>
-<h4 class="date">2019-08-03</h4>
+<h4 class="date">2020-03-31</h4>
 
 
 
 <p>This is a quick overview of how to retrieve data from the Soil and Landscape Grid of Australia.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt; Warning: package &#39;raster&#39; was built under R version 3.6.1</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; Loading required package: sp</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(slga)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(slga)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>Two high-level wrapper functions, <code>get_soils_data()</code> and <code>get_lscape_data()</code>, have been provided to manage downloads. To use them correctly, you should be aware of the package datasets <code>slga_attribute_info()</code> and <code>slga_product_info()</code>. They contain allowable values for some of the function inputs as well as key metadata.</p>
-<p>The two tables are derived from information on the <a href="http://www.clw.csiro.au/aclep/soilandlandscapegrid">SLGA website</a> and in the WCS metadata documents.</p>
+<p>The two tables are derived from information on the <a href="https://www.clw.csiro.au/aclep/soilandlandscapegrid">SLGA website</a> and in the WCS metadata documents.</p>
 <div id="soils-data" class="section level2">
 <h2>Soils data</h2>
 <p>Soils data is available in a large number of combinations - each product has a set of available attributes (soil properties). Not all soil attributes are available within each product, but you can check which ones are available in <code>slga_attribute_info()</code>. Each soil attribute has six depth slices extending from the land surface to 2.0 metres below. Each soil attribute also has three associated values - the estimated value, plus its lower (5%) and upper (95%) confidence limits. Effectively, if you visited a single pixel on the Grid and sampled 100 points inside that pixel, you should expect that 90 of those samples would return values within those limits.</p>
