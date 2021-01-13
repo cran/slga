@@ -12,8 +12,8 @@ status](https://codecov.io/gh/obrl-soil/slga/branch/master/graph/badge.svg)](htt
 
 `slga` offers the ability to download geographic subsets of raster data
 from the [Soil and Landscape Grid of
-Australia](https://www.clw.csiro.au/aclep/soilandlandscapegrid/). The
-Grid was generated in 2014 from a compilation of Australian soil and
+Australia](https://www.clw.csiro.au/aclep/soilandlandscapegrid/index.html).
+The Grid was generated in 2014 from a compilation of Australian soil and
 landscape data and contains a set of modelled soil attributes that meet
 the globalsoilmap.net specification.
 
@@ -71,9 +71,10 @@ While it is possible to download data for large extents using this
 package, please be aware that the data volume can get large, and it will
 not be very quick or efficient. If you want to obtain SLGA data for a
 significant proportion of Australia, you may prefer to access the full
-datasets via the [CSIRO Data Access Portal](https://data.csiro.au/dap).
-Note that 1" (30m) versions of the slga terrain attributes are also
-available on that portal.
+datasets via the [CSIRO Data Access
+Portal](https://data.csiro.au/dap/home?execution=e1s1). Note that 1"
+(30m) versions of the slga terrain attributes are also available on that
+portal.
 
 ### Asking for help
 
