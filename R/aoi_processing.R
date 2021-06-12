@@ -8,7 +8,7 @@
 #' @keywords internal
 #' @rdname aoi_convert
 #' @importFrom raster extent
-#' @importFrom sf st_bbox st_crs st_as_sfc sf_extSoftVersion
+#' @importFrom sf st_as_sf st_as_sfc st_bbox st_crs st_transform
 #' @importFrom utils data
 #'
 aoi_convert <- function(aoi = NULL) {
@@ -22,8 +22,7 @@ aoi_convert <- function(aoi = NULL) {
 aoi_convert.numeric <- function(aoi = NULL) {
   # check for common coord order fails (NB last is Aus-specific)
   if(any(aoi[3] <= aoi[1], aoi[2] >= aoi[4], aoi[2] >= aoi[1])) {
-    stop('Please check that AOI coordinates are ordered correctly
-         - xmin, ymin, xmax, ymax.')
+    stop('Please check that AOI coordinates are ordered correctly - xmin, ymin, xmax, ymax.')
   }
   message("Assuming AOI coordinates are in EPSG:4283 and ordered correctly.")
   structure(aoi, names = c("xmin", "ymin", "xmax", "ymax"),
@@ -80,6 +79,15 @@ aoi_convert.sfg <- function(aoi = NULL) {
   sf::st_bbox(new)
 }
 
+#' @rdname aoi_convert
+#' @inherit aoi_convert return
+#' @method aoi_convert s2_geography
+#'
+aoi_convert.s2_geography <- function(aoi = NULL) {
+  # s2 classes all come back into sf as 4326 so
+  sf::st_bbox(sf::st_transform(sf::st_as_sf(aoi), 4283))
+}
+
 #' Transform an AOI's CRS
 #'
 #' Transforms an `sf` style bounding box object into the specified coordinate
@@ -113,28 +121,29 @@ aoi_transform <- function(aoi = NULL, crs = 4283) {
 #'   \code{\link[slga:slga_product_info]{slga_product_info}}.
 #' @return Logical, TRUE if overlap exists.
 #' @note Will return TRUE if bbox is over product but not over land.
-#' @importFrom sf st_as_sfc st_crs st_intersects
+#' @importFrom sf sf_use_s2 st_as_sfc st_bbox st_crs st_intersects
+#' @importFrom s2 s2_intersects_box
 #' @importFrom utils data
-#' @keywords internal
 #'
 aoi_overlaps <- function(aoi = NULL, product = NULL) {
   slga_product_info <- NULL
   utils::data('slga_product_info', envir = environment())
   prd <- slga_product_info[which(slga_product_info$Short_Name == product), ]
   prd <- c(prd[['xmin']], prd[['ymin']], prd[['xmax']], prd[['ymax']])
+  # s2 plays up if boxes are projected for this check
   prd_aoi <- structure(prd, names = c("xmin", "ymin", "xmax", "ymax"),
-                       class = "bbox", crs =  sf::st_crs(4283))
-  # cast both extents to sfc and check intersect
-  # note slightly dodgy as unprojected, but high acc not required
-  ol <- suppressMessages(
-    sf::st_intersects(sf::st_as_sfc(aoi), sf::st_as_sfc(prd_aoi))
-  )
-  if(length(ol[[1]]) == 0L) { FALSE } else { TRUE }
-}
+                       class = "bbox", crs =  sf::st_crs(NA))
+  aoi <- sf::st_as_sfc(aoi)
+  sf::st_crs(aoi) <- NA
+  aoi <- sf::st_bbox(aoi)
+
+  int <- sf::st_intersects(sf::st_as_sfc(aoi), sf::st_as_sfc(prd_aoi))
+  if(length(int[[1]]) == 0L) { FALSE } else { TRUE }
+  }
 
 #' Align AOI to product
 #'
-#' Cheerfully stolen from code{\link[raster:alignExtent]{raster::alignExtent}}
+#' Cheerfully stolen from \code{\link[raster:alignExtent]{raster::alignExtent}}
 #' and adapted to sf bbox objects. This is designed to prevent WCS server-side
 #' interpolation when requesting SLGA data.
 #'
@@ -247,6 +256,7 @@ aoi_tile <- function(aoi = NULL, product = NULL, size = 1) {
 
   # tidy tiles - align and discard non-overlapping
   # NB earlier checks preclude the possibility of no tiles overlapping
+  # NB NB all tiles will overlap by one cell, on purpose
   tiles <- lapply(tiles, function(x) {    aoi_align(x, product) })
   keep  <- sapply(tiles, function(x) { aoi_overlaps(x, product) })
   tiles <- tiles[keep]

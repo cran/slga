@@ -1,8 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![Travis build
-status](https://travis-ci.com/obrl-soil/slga.svg?branch=master)](https://travis-ci.com/obrl-soil/slga)
+[![R-CMD-check](https://github.com/obrl-soil/slga/workflows/R-CMD-check/badge.svg)](https://github.com/obrl-soil/slga/actions)
 [![Coverage
 status](https://codecov.io/gh/obrl-soil/slga/branch/master/graph/badge.svg)](https://codecov.io/github/obrl-soil/slga?branch=master)
 [![CRAN](https://www.r-pkg.org/badges/version/slga)](https://cran.r-project.org/package=slga)
@@ -56,16 +55,16 @@ library(ggplot2)
 ``` r
 # get surface clay content for King Island
 aoi <- c(152.95, -27.55, 153.07, -27.45)
-bne_surface_clay <- get_slga_data(product = 'NAT', attribute = 'CLY',
-                                  component = 'all', depth = 1,
-                                  aoi = aoi, write_out = FALSE)
+bne_surface_clay <- get_soils_data(product = 'NAT', attribute = 'CLY',
+                                   component = 'all', depth = 1,
+                                   aoi = aoi, write_out = FALSE)
 ```
 
 <img src="man/figures/README-dplot-1.png" width="90%" style="display: block; margin: auto;" />
 
 See the package vignette for further detail.
 
-### Warning\!
+### Warning!
 
 While it is possible to download data for large extents using this
 package, please be aware that the data volume can get large, and it will
@@ -87,4 +86,4 @@ more people are available to help you. You’re welcome to ping me in a
 comment on those websites or on twitter (@obrl\_soil) to get my
 attention.
 
------
+------------------------------------------------------------------------
